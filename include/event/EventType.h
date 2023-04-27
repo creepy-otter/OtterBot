@@ -1,12 +1,11 @@
 #pragma once
 
-namespace otterbot
-{
+namespace otterbot {
 
 enum class EventType {
-    DataUpdate,
-    OrderFill,
-    // Add more event types as needed
+  DataUpdate,
+  OrderFill,
+  // Add more event types as needed
 };
 
-} // namespace otterbot
+}  // namespace otterbot

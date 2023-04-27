@@ -2,17 +2,16 @@
 
 #include "EventType.h"
 
-namespace otterbot
-{
+namespace otterbot {
 
 class Event {
-public:
-    Event(EventType type) : type(type) {}
-    EventType get_type() const { return type; }
-    virtual ~Event() = default;
+ public:
+  Event(EventType type) : type(type) {}
+  EventType get_type() const { return type; }
+  virtual ~Event() = default;
 
-private:
-    EventType type;
+ private:
+  EventType type;
 };
 
-} // namespace otterbot
+}  // namespace otterbot
