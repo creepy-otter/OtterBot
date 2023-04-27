@@ -1,1 +1,18 @@
-.vscode/*
+# .gitignore
+
+# Ignore build directory
+/build/
+
+# Ignore CMake generated files
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+*.cmake
+
+# Ignore object files, archives, and shared libraries
+*.o
+*.a
+*.so
+
+# Ignore Visual Studio Code settings and cache
+.vscode/
