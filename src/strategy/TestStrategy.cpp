@@ -15,7 +15,7 @@ TestStrategy::TestStrategy(EventDispatcher& dispatcher,
       position_(0) {}
 
 void TestStrategy::onDataUpdate(const DataUpdateEvent& event) {
-  // std::time_t t = std::chrono::system_clock::to_time_t(event.getTime());
+    // std::time_t t = std::chrono::system_clock::to_time_t(event.getTime());
   // std::cout << std::put_time(std::localtime(&t), "%Y-%m-%d %H:%M:%S") << " "
   //           << event.getPrice() << std::endl;
   if (event.getSymbol() == symbol_) {
@@ -43,7 +43,8 @@ void TestStrategy::onOrderFill(const OrderFillEvent& event) {
   else if (event.getOrderSide() == OrderSide::SELL)
     std::cout << "Sell ";
   std::cout << "1 at " << event.getFillPrice() << std::endl;
-  std::cout << "Current position: " << position_ << std::endl;
+  std::cout << "Current position of " << symbol_ << ": " << position_
+            << std::endl;
 }
 
 void TestStrategy::placeBuyOrder(double price) {

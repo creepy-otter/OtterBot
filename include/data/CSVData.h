@@ -1,5 +1,6 @@
 #pragma once
 
+#include <atomic>
 #include <string>
 #include <thread>
 
@@ -24,6 +25,9 @@ class CSVData {
   void on_data_received(const std::string& symbol, double price, int volume,
                         date::sys_seconds timestamp);
   void subscribe();
+
+  bool isEnd() const;
+
   ~CSVData();
 
  protected:
@@ -31,5 +35,6 @@ class CSVData {
   std::string symbol_;
   std::string path_;
   std::thread subscribe_thread_;
+  std::atomic<bool> eof_{false};
 };
 }  // namespace otterbot

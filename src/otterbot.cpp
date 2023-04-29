@@ -5,6 +5,7 @@
 #include "event/DataUpdateEvent.h"
 #include "event/EventDispatcher.h"
 #include "execution/BacktestHandler.h"
+#include "portfolio/Portfolio.h"
 #include "strategy/TestStrategy.h"
 
 using namespace otterbot;
@@ -12,8 +13,9 @@ using namespace otterbot;
 int main() {
   EventDispatcher dispatcher;
   CSVData csvData(dispatcher, "AAPL", "../OtterBot/data/aapl.csv");
-  TestStrategy strategy(dispatcher, "AAPL", 0.2);
+  TestStrategy strategy(dispatcher, "AAPL", 0.02);
   BacktestHandler backtest(dispatcher);
+  Portfolio portfolio(100000);
 
   dispatcher.register_handler(
       EventType::DataUpdate, [&strategy](const Event& event) {
@@ -34,4 +36,13 @@ int main() {
       EventType::OrderFill, [&strategy](const Event& event) {
         strategy.onOrderFill(dynamic_cast<const OrderFillEvent&>(event));
       });
+
+  dispatcher.register_handler(
+      EventType::OrderFill, [&portfolio](const Event& event) {
+        portfolio.onOrderFill(dynamic_cast<const OrderFillEvent&>(event));
+      });
+
+  while (!csvData.isEnd())
+    ;
+  std::cout << "P&L: " << portfolio.getPnL() << std::endl;
 }

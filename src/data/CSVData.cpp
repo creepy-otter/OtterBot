@@ -23,6 +23,7 @@ void CSVData::subscribe() {
     on_data_received(symbol_, row[YF::Last].get<double>(),
                      row[YF::Volume].get<int>(), ts);
   }
+  eof_.store(true);
 }
 
 void CSVData::on_data_received(const std::string& symbol, double price,
@@ -30,6 +31,8 @@ void CSVData::on_data_received(const std::string& symbol, double price,
   DataUpdateEvent e(symbol, price, volume, timestamp);
   dispatcher_.dispatch(e);
 }
+
+bool CSVData::isEnd() const { return eof_.load(); }
 
 CSVData::~CSVData() {
   if (subscribe_thread_.joinable()) {
