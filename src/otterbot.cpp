@@ -4,6 +4,7 @@
 #include "data/CSVData.h"
 #include "event/DataUpdateEvent.h"
 #include "event/EventDispatcher.h"
+#include "execution/BacktestHandler.h"
 #include "strategy/TestStrategy.h"
 
 using namespace otterbot;
@@ -11,11 +12,26 @@ using namespace otterbot;
 int main() {
   EventDispatcher dispatcher;
   CSVData csvData(dispatcher, "AAPL", "../OtterBot/data/aapl.csv");
-  TestStrategy strategy(dispatcher);
+  TestStrategy strategy(dispatcher, "AAPL", 0.2);
+  BacktestHandler backtest(dispatcher);
 
-  auto hid = dispatcher.register_handler(
+  dispatcher.register_handler(
       EventType::DataUpdate, [&strategy](const Event& event) {
         strategy.onDataUpdate(dynamic_cast<const DataUpdateEvent&>(event));
-      });  // EventHandler ID
-  return 0;
+      });
+
+  dispatcher.register_handler(
+      EventType::DataUpdate, [&backtest](const Event& event) {
+        backtest.onDataUpdate(dynamic_cast<const DataUpdateEvent&>(event));
+      });
+
+  dispatcher.register_handler(
+      EventType::Order, [&backtest](const Event& event) {
+        backtest.onOrder(dynamic_cast<const OrderEvent&>(event));
+      });
+
+  dispatcher.register_handler(
+      EventType::OrderFill, [&strategy](const Event& event) {
+        strategy.onOrderFill(dynamic_cast<const OrderFillEvent&>(event));
+      });
 }

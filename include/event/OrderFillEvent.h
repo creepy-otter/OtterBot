@@ -6,14 +6,27 @@ namespace otterbot {
 
 class OrderFillEvent : public Event {
  public:
-  OrderFillEvent(int order_id, int quantity)
-      : Event(EventType::OrderFill), order_id(order_id), quantity(quantity) {}
-  int get_order_id() const { return order_id; }
-  int get_quantity() const { return quantity; }
+  OrderFillEvent(const std::string& symbol, OrderSide side, double fill_price,
+                 double fill_quantity)
+      : Event(EventType::OrderFill),
+        symbol_(symbol),
+        side_(side),
+        fill_price_(fill_price),
+        fill_quantity_(fill_quantity) {}
+
+  const std::string& getSymbol() const { return symbol_; }
+
+  const OrderSide& getOrderSide() const { return side_; }
+
+  double getFillPrice() const { return fill_price_; }
+
+  double getFillQuantity() const { return fill_quantity_; }
 
  private:
-  int order_id;
-  int quantity;
+  std::string symbol_;
+  OrderSide side_;
+  double fill_price_;
+  double fill_quantity_;
 };
 
 }  // namespace otterbot

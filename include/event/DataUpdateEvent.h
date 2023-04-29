@@ -15,10 +15,10 @@ class DataUpdateEvent : public Event {
         price_(price),
         volume_(volume),
         timestamp_(timestamp) {}
-  std::string get_symbol() const { return symbol_; }
-  double get_price() const { return price_; }
-  int get_volume() const { return volume_; }
-  date::sys_seconds get_time() const { return timestamp_; }
+  std::string getSymbol() const { return symbol_; }
+  double getPrice() const { return price_; }
+  int getVolume() const { return volume_; }
+  date::sys_seconds getTime() const { return timestamp_; }
 
  private:
   std::string symbol_;
