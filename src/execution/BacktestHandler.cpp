@@ -6,8 +6,9 @@
 
 namespace otterbot {
 
-BacktestHandler::BacktestHandler(EventDispatcher& dispatcher)
-    : ExecutionHandler(dispatcher) {
+BacktestHandler::BacktestHandler(EventDispatcher& dispatcher,
+                                 Portfolio& portfolio)
+    : ExecutionHandler(dispatcher), portfolio_(portfolio) {
   dispatcher_.register_handler(
       EventType::DataUpdate, [this](const Event& event) {
         this->onDataUpdate(dynamic_cast<const DataUpdateEvent&>(event));

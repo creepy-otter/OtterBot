@@ -1,5 +1,7 @@
 #pragma once
 
+#include <atomic>
+#include <shared_mutex>
 #include <unordered_map>
 
 #include "event/EventDispatcher.h"
@@ -22,5 +24,6 @@ class Portfolio {
   double pnl_;
   std::unordered_map<std::string, int> positions_;
   EventDispatcher& dispatcher_;
+  mutable std::shared_mutex mtx_;
 };
 }  // namespace otterbot

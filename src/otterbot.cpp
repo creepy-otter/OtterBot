@@ -13,9 +13,9 @@ using namespace otterbot;
 int main() {
   EventDispatcher dispatcher;
   CSVData csvData(dispatcher, "AAPL", "../OtterBot/data/aapl.csv");
-  TestStrategy strategy(dispatcher, "AAPL", 0.02);
-  BacktestHandler backtest(dispatcher);
   Portfolio portfolio(dispatcher, 100000);
+  TestStrategy strategy(dispatcher, "AAPL", 0.02);
+  BacktestHandler backtest(dispatcher, portfolio);
 
   // dispatcher.register_handler(
   //     EventType::DataUpdate, [&strategy](const Event& event) {
