@@ -9,13 +9,19 @@ namespace otterbot {
 
 TestStrategy::TestStrategy(EventDispatcher& dispatcher,
                            const std::string& symbol, double distance)
-    : Strategy(dispatcher),
-      symbol_(symbol),
-      distance_(distance),
-      position_(0) {}
+    : Strategy(dispatcher), symbol_(symbol), distance_(distance), position_(0) {
+  dispatcher_.register_handler(
+      EventType::DataUpdate, [this](const Event& event) {
+        this->onDataUpdate(dynamic_cast<const DataUpdateEvent&>(event));
+      });
+  dispatcher_.register_handler(
+      EventType::OrderFill, [this](const Event& event) {
+        this->onOrderFill(dynamic_cast<const OrderFillEvent&>(event));
+      });
+}
 
 void TestStrategy::onDataUpdate(const DataUpdateEvent& event) {
-    // std::time_t t = std::chrono::system_clock::to_time_t(event.getTime());
+  // std::time_t t = std::chrono::system_clock::to_time_t(event.getTime());
   // std::cout << std::put_time(std::localtime(&t), "%Y-%m-%d %H:%M:%S") << " "
   //           << event.getPrice() << std::endl;
   if (event.getSymbol() == symbol_) {

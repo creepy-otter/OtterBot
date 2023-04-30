@@ -15,32 +15,32 @@ int main() {
   CSVData csvData(dispatcher, "AAPL", "../OtterBot/data/aapl.csv");
   TestStrategy strategy(dispatcher, "AAPL", 0.02);
   BacktestHandler backtest(dispatcher);
-  Portfolio portfolio(100000);
+  Portfolio portfolio(dispatcher, 100000);
 
-  dispatcher.register_handler(
-      EventType::DataUpdate, [&strategy](const Event& event) {
-        strategy.onDataUpdate(dynamic_cast<const DataUpdateEvent&>(event));
-      });
+  // dispatcher.register_handler(
+  //     EventType::DataUpdate, [&strategy](const Event& event) {
+  //       strategy.onDataUpdate(dynamic_cast<const DataUpdateEvent&>(event));
+  //     });
 
-  dispatcher.register_handler(
-      EventType::DataUpdate, [&backtest](const Event& event) {
-        backtest.onDataUpdate(dynamic_cast<const DataUpdateEvent&>(event));
-      });
+  // dispatcher.register_handler(
+  //     EventType::DataUpdate, [&backtest](const Event& event) {
+  //       backtest.onDataUpdate(dynamic_cast<const DataUpdateEvent&>(event));
+  //     });
 
-  dispatcher.register_handler(
-      EventType::Order, [&backtest](const Event& event) {
-        backtest.onOrder(dynamic_cast<const OrderEvent&>(event));
-      });
+  // dispatcher.register_handler(
+  //     EventType::Order, [&backtest](const Event& event) {
+  //       backtest.onOrder(dynamic_cast<const OrderEvent&>(event));
+  //     });
 
-  dispatcher.register_handler(
-      EventType::OrderFill, [&strategy](const Event& event) {
-        strategy.onOrderFill(dynamic_cast<const OrderFillEvent&>(event));
-      });
+  // dispatcher.register_handler(
+  //     EventType::OrderFill, [&strategy](const Event& event) {
+  //       strategy.onOrderFill(dynamic_cast<const OrderFillEvent&>(event));
+  //     });
 
-  dispatcher.register_handler(
-      EventType::OrderFill, [&portfolio](const Event& event) {
-        portfolio.onOrderFill(dynamic_cast<const OrderFillEvent&>(event));
-      });
+  // dispatcher.register_handler(
+  //     EventType::OrderFill, [&portfolio](const Event& event) {
+  //       portfolio.onOrderFill(dynamic_cast<const OrderFillEvent&>(event));
+  //     });
 
   while (!csvData.isEnd())
     ;
