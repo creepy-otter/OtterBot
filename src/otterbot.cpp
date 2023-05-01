@@ -14,7 +14,7 @@ int main() {
   EventDispatcher dispatcher;
   CSVData csvData(dispatcher, "AAPL", "../OtterBot/data/aapl.csv");
   Portfolio portfolio(dispatcher, 100000);
-  TestStrategy strategy(dispatcher, "AAPL", 0.02);
+  TestStrategy strategy(dispatcher, "AAPL", 0.01);
   BacktestHandler backtest(dispatcher, portfolio);
 
   // dispatcher.register_handler(

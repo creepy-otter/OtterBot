@@ -36,10 +36,10 @@ void TestStrategy::onDataUpdate(const DataUpdateEvent& event) {
 void TestStrategy::onOrderFill(const OrderFillEvent& event) {
   if (event.getSymbol() == symbol_) {
     if (event.getOrderSide() == OrderSide::BUY) {
-      position_ += 1;
+      position_ += 10;
       placeSellOrder(event.getFillPrice());
     } else if (event.getOrderSide() == OrderSide::SELL) {
-      position_ -= 1;
+      position_ -= 10;
       placeBuyOrder(event.getFillPrice());
     }
   }
@@ -48,21 +48,19 @@ void TestStrategy::onOrderFill(const OrderFillEvent& event) {
     std::cout << "Buy  ";
   else if (event.getOrderSide() == OrderSide::SELL)
     std::cout << "Sell ";
-  std::cout << "1 at " << event.getFillPrice() << std::endl;
+  std::cout << "10 at " << event.getFillPrice() << std::endl;
   std::cout << "Current position of " << symbol_ << ": " << position_
             << std::endl;
 }
 
-void TestStrategy::placeBuyOrder(double price) {
+OrderId TestStrategy::placeBuyOrder(double price) {
   double buy_price = price - distance_;
-  OrderEvent e(symbol_, OrderType::LIMIT, OrderSide::BUY, buy_price, 1);
-  dispatcher_.dispatch(e);
+  return placeOrder(symbol_, OrderType::LIMIT, OrderSide::BUY, buy_price, 10);
 }
 
-void TestStrategy::placeSellOrder(double price) {
+OrderId TestStrategy::placeSellOrder(double price) {
   double sell_price = price + distance_;
-  OrderEvent e(symbol_, OrderType::LIMIT, OrderSide::SELL, sell_price, 1);
-  dispatcher_.dispatch(e);
+  return placeOrder(symbol_, OrderType::LIMIT, OrderSide::SELL, sell_price, 10);
 }
 
 }  // namespace otterbot

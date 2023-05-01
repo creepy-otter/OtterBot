@@ -12,8 +12,8 @@ class TestStrategy : public Strategy {
   void onOrderFill(const OrderFillEvent& event) override;
 
  private:
-  void placeBuyOrder(double price);
-  void placeSellOrder(double price);
+  OrderId placeBuyOrder(double price);
+  OrderId placeSellOrder(double price);
   std::string symbol_;
   double distance_;
   int position_;

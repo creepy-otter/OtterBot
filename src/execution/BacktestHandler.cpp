@@ -3,6 +3,7 @@
 #include "event/DataUpdateEvent.h"
 #include "event/OrderEvent.h"
 #include "event/OrderFillEvent.h"
+#include "event/OrderRejectEvent.h"
 
 namespace otterbot {
 
@@ -24,7 +25,8 @@ void BacktestHandler::onOrder(const OrderEvent& order) {
     order_map_[order.getSymbol()].push_back(order);
   } else {
     OrderFillEvent fill_event(order.getSymbol(), order.getOrderSide(),
-                              order.getPrice(), order.getQuantity());
+                              order.getPrice(), order.getQuantity(),
+                              order.getOrderId());
     dispatcher_.dispatch(fill_event);
   }
 }
@@ -54,7 +56,7 @@ void BacktestHandler::onDataUpdate(const DataUpdateEvent& event) {
 
       if (filled) {
         OrderFillEvent fill_event(symbol, order.getOrderSide(), price,
-                                  order.getQuantity());
+                                  order.getQuantity(), order.getOrderId());
         dispatcher_.dispatch(fill_event);
 
         std::swap(order, orders.back());
