@@ -9,16 +9,10 @@ namespace otterbot {
 
 TestStrategy::TestStrategy(EventDispatcher& dispatcher,
                            const std::string& symbol, double distance)
-    : Strategy(dispatcher), symbol_(symbol), distance_(distance), position_(0) {
-  dispatcher_.register_handler(
-      EventType::DataUpdate, [this](const Event& event) {
-        this->onDataUpdate(dynamic_cast<const DataUpdateEvent&>(event));
-      });
-  dispatcher_.register_handler(
-      EventType::OrderFill, [this](const Event& event) {
-        this->onOrderFill(dynamic_cast<const OrderFillEvent&>(event));
-      });
-}
+    : Strategy(dispatcher),
+      symbol_(symbol),
+      distance_(distance),
+      position_(0) {}
 
 void TestStrategy::onDataUpdate(const DataUpdateEvent& event) {
   // std::time_t t = std::chrono::system_clock::to_time_t(event.getTime());
@@ -51,6 +45,16 @@ void TestStrategy::onOrderFill(const OrderFillEvent& event) {
   std::cout << "10 at " << event.getFillPrice() << std::endl;
   std::cout << "Current position of " << symbol_ << ": " << position_
             << std::endl;
+}
+
+void TestStrategy::onOrderReject(const OrderRejectEvent& event) {
+  std::cout << "Order Rejected: " << event.getMessage() << ", ";
+  if (event.getOrderSide() == OrderSide::BUY)
+    std::cout << "Buy  ";
+  else if (event.getOrderSide() == OrderSide::SELL)
+    std::cout << "Sell ";
+  std::cout << event.getQuantity() << " of " << event.getSymbol() << " at "
+            << event.getPrice() << std::endl;
 }
 
 OrderId TestStrategy::placeBuyOrder(double price) {

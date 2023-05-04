@@ -13,7 +13,7 @@ using namespace otterbot;
 int main() {
   EventDispatcher dispatcher;
   CSVData csvData(dispatcher, "AAPL", "../OtterBot/data/aapl.csv");
-  Portfolio portfolio(dispatcher, 100000);
+  Portfolio portfolio(dispatcher, 1);
   TestStrategy strategy(dispatcher, "AAPL", 0.01);
   BacktestHandler backtest(dispatcher, portfolio);
 

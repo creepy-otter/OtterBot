@@ -10,6 +10,7 @@ class TestStrategy : public Strategy {
                         double distance);
   void onDataUpdate(const DataUpdateEvent& event) override;
   void onOrderFill(const OrderFillEvent& event) override;
+  void onOrderReject(const OrderRejectEvent& event) override;
 
  private:
   OrderId placeBuyOrder(double price);

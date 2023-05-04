@@ -13,7 +13,8 @@
 namespace otterbot {
 class BacktestHandler : public ExecutionHandler {
  public:
-  explicit BacktestHandler(EventDispatcher& dispatcher, Portfolio& portfolio_);
+  explicit BacktestHandler(EventDispatcher& dispatcher, Portfolio& portfolio_,
+                           bool short_enabled = false);
   void onOrder(const OrderEvent& order) override;
   void onDataUpdate(const DataUpdateEvent& event);
   void onOrderFill() override;
@@ -21,5 +22,6 @@ class BacktestHandler : public ExecutionHandler {
  protected:
   std::unordered_map<std::string, std::vector<OrderEvent>> order_map_;
   Portfolio& portfolio_;
+  bool short_enabled_;
 };
 }  // namespace otterbot
