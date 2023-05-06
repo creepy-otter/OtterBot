@@ -11,7 +11,7 @@ find_package(Threads REQUIRED)
 
 include_directories(include)
 
-set(TWS_API_DIR ${CMAKE_CURRENT_SOURCE_DIR}/TwsApiCpp/TwsApiC++)
+set(TWS_API_DIR ${CMAKE_CURRENT_SOURCE_DIR}/submodule/TwsApiCpp/TwsApiC++)
 set(API_INCLUDE_DIR ${TWS_API_DIR}/Api)
 set(IB_POSIX_CLIENT_SRC ${TWS_API_DIR}/../source/PosixClient)
 set(IB_POSIX_CLIENT_INCLUDE_DIR ${IB_POSIX_CLIENT_SRC}/Shared)
@@ -27,7 +27,7 @@ file(GLOB_RECURSE OTTER_SOURCES "src/*.cpp")
 
 add_executable(${PROJECT_NAME} ${OTTER_SOURCES})
 
-add_subdirectory(TwsApiCpp/TwsApiC++)
+add_subdirectory(submodule/TwsApiCpp/TwsApiC++)
 
 # target_link_libraries(${PROJECT_NAME} tws_cpp_api Threads::Threads)
 # target_compile_options(${PROJECT_NAME} PRIVATE -Wall)
