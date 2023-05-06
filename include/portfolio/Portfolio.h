@@ -25,11 +25,11 @@ class Portfolio {
   int getPosition(const std::string& symbol) const;
 
  private:
+  EventDispatcher& dispatcher_;
   double cash_;
   double pnl_;
   double power_;
   std::unordered_map<std::string, int> positions_;
-  EventDispatcher& dispatcher_;
   mutable std::shared_mutex mtx_;
 };
 }  // namespace otterbot

@@ -1,12 +1,16 @@
 #include <iomanip>
 #include <iostream>
 
+#include "TwsApiDefs.h"
 #include "data/CSVData.h"
 #include "event/DataUpdateEvent.h"
 #include "event/EventDispatcher.h"
 #include "execution/BacktestHandler.h"
 #include "portfolio/Portfolio.h"
 #include "strategy/TestStrategy.h"
+
+/// Faster: Check spelling of parameter at compile time instead of runtime.
+// #include "TwsApiDefs.h"
 
 using namespace otterbot;
 

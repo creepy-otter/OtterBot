@@ -1,5 +1,7 @@
 #include <event/EventDispatcher.h>
 
+#include <algorithm>
+
 namespace otterbot {
 
 EventDispatcher::EventHandlerID EventDispatcher::register_handler(
