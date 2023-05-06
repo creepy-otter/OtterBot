@@ -1,0 +1,3 @@
+[submodule "TwsApi"]
+	path = submodule/TwsApiCpp
+	url = https://github.com/creepy-otter/TwsApiCpp.git
