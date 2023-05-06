@@ -27,7 +27,7 @@ file(GLOB_RECURSE OTTER_SOURCES "src/*.cpp")
 
 add_executable(${PROJECT_NAME} ${OTTER_SOURCES})
 
-add_subdirectory(TwsApiCpp)
+add_subdirectory(TwsApiCpp/TwsApiC++)
 
 # target_link_libraries(${PROJECT_NAME} tws_cpp_api Threads::Threads)
 # target_compile_options(${PROJECT_NAME} PRIVATE -Wall)
