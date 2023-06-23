@@ -1,5 +1,7 @@
 #include "strategy/TestStrategy.h"
 
+#include <glog/logging.h>
+
 #include <iomanip>
 #include <iostream>
 
@@ -15,9 +17,6 @@ TestStrategy::TestStrategy(EventDispatcher& dispatcher,
       position_(0) {}
 
 void TestStrategy::onDataUpdate(const DataUpdateEvent& event) {
-  // std::time_t t = std::chrono::system_clock::to_time_t(event.getTime());
-  // std::cout << std::put_time(std::localtime(&t), "%Y-%m-%d %H:%M:%S") << " "
-  //           << event.getPrice() << std::endl;
   if (event.getSymbol() == symbol_) {
     double price = event.getPrice();
     if (position_ == 0) {
@@ -37,24 +36,23 @@ void TestStrategy::onOrderFill(const OrderFillEvent& event) {
       placeBuyOrder(event.getFillPrice());
     }
   }
-  std::cout << "Order Filled: ";
-  if (event.getOrderSide() == OrderSide::BUY)
-    std::cout << "Buy  ";
-  else if (event.getOrderSide() == OrderSide::SELL)
-    std::cout << "Sell ";
-  std::cout << "10 at " << event.getFillPrice() << std::endl;
-  std::cout << "Current position of " << symbol_ << ": " << position_
-            << std::endl;
+  if (event.getOrderSide() == OrderSide::BUY) {
+    LOG(INFO) << "Order Filled: Buy 10 at " << event.getFillPrice();
+  } else if (event.getOrderSide() == OrderSide::SELL) {
+    LOG(INFO) << "Order Filled: Sell 10 at " << event.getFillPrice();
+  }
 }
 
 void TestStrategy::onOrderReject(const OrderRejectEvent& event) {
-  std::cout << "Order Rejected: " << event.getMessage() << ", ";
-  if (event.getOrderSide() == OrderSide::BUY)
-    std::cout << "Buy  ";
-  else if (event.getOrderSide() == OrderSide::SELL)
-    std::cout << "Sell ";
-  std::cout << event.getQuantity() << " of " << event.getSymbol() << " at "
-            << event.getPrice() << std::endl;
+  if (event.getOrderSide() == OrderSide::BUY) {
+    LOG(INFO) << "Order Rejected: " << event.getMessage() << ", Buy "
+              << event.getQuantity() << " of " << event.getSymbol() << " at "
+              << event.getPrice();
+  } else if (event.getOrderSide() == OrderSide::SELL) {
+    LOG(INFO) << "Order Rejected: " << event.getMessage() << ", Sell "
+              << event.getQuantity() << " of " << event.getSymbol() << " at "
+              << event.getPrice();
+  }
 }
 
 OrderId TestStrategy::placeBuyOrder(double price) {

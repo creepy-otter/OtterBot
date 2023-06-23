@@ -16,6 +16,6 @@ enum class OrderType { MARKET, LIMIT, STOP };
 
 enum class OrderSide { BUY, SELL };
 
-using OrderId = uint64_t;
+using OrderId = long;
 
 }  // namespace otterbot
