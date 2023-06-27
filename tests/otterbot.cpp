@@ -73,7 +73,9 @@ int main(int argc, char* argv[]) {
 
   EventDispatcher dispatcher;
   CSVData csvData(dispatcher, "AAPL", "../data/aapl.csv");
-  IBKRHisData hisData(dispatcher, "AAPL");
+  IBKRHisData hisData(dispatcher, "AAPL", EndDateTime(2013, 02, 20),
+                      DurationStr(1, *DurationHorizon::Days),
+                      BarSizeSetting::_1_min);
   Portfolio portfolio(dispatcher, 1);
   TestStrategy strategy(dispatcher, "AAPL", 0.01);
   BacktestHandler backtest(dispatcher, portfolio);

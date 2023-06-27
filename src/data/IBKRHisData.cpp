@@ -1,8 +1,11 @@
 #include "data/IBKRHisData.h"
 
+#include <glog/logging.h>
+
 #include "event/DataUpdateEvent.h"
 #include "ibkr/IBKRUtils.h"
 #include "lib/csv.hpp"
+#include "lib/date.h"
 
 namespace otterbot {
 
@@ -10,20 +13,26 @@ using namespace csv;
 using namespace date;
 using namespace TwsApi;
 
-IBKRHisData::IBKRHisData(EventDispatcher& dispatcher, const std::string& symbol)
-    : EWrapperL0(true), dispatcher_(dispatcher), symbol_(symbol) {
+IBKRHisData::IBKRHisData(EventDispatcher& dispatcher, const std::string& symbol,
+                         IBString endTime, IBString duration,
+                         TwsApi::BarSizeSetting barSize)
+    : EWrapperL0(true),
+      dispatcher_(dispatcher),
+      symbol_(symbol),
+      endTime_(endTime),
+      duration_(duration),
+      barSize_(barSize) {
   connect();
 }
 
-void IBKRHisData::historicalData(TickerId reqId, const IBString& date,
+void IBKRHisData::historicalData(TickerId reqId, const IBString& dt,
                                  double open, double high, double low,
                                  double close, int volume, int barCount,
                                  double WAP, int hasGaps) {
-  std::istringstream in(date);
-  sys_seconds ts;
-  in >> parse("%Y%m%d %H:%M:%S", ts);
+  int timestamp = std::stoi(dt);
+  sys_seconds ts{std::chrono::seconds{timestamp}};
   on_data_received(symbol_, close, volume, ts);
-  if (IsEndOfHistoricalData(date)) {
+  if (IsEndOfHistoricalData(dt)) {
     isEnd_ = true;
   }
 }
@@ -35,9 +44,8 @@ void IBKRHisData::subscribe() {
   C.currency = "USD";
   C.exchange = *Exchange::IB_SMART;
   C.primaryExchange = *Exchange::AMEX;
-  client_->reqHistoricalData(getNextTickerId(), C, EndDateTime(2013, 02, 20),
-                             DurationStr(1, *DurationHorizon::Months),
-                             *BarSizeSetting::_10_mins, *WhatToShow::TRADES,
+  client_->reqHistoricalData(getNextTickerId(), C, endTime_, duration_,
+                             TwsApi::operator*(barSize_), *WhatToShow::TRADES,
                              UseRTH::OnlyRegularTradingData,
                              FormatDate::AsSecondsSince);
 }
@@ -50,6 +58,11 @@ void IBKRHisData::on_data_received(const std::string& symbol, double price,
   dispatcher_.dispatch(e);
 }
 
+void IBKRHisData::OnCatch(const char* MethodName, const long Id) {
+  std::cout << "catch: " << MethodName << ", id: " << Id << std::endl;
+  isEnd_ = true;
+}
+
 void IBKRHisData::error(const int id, const int errorCode,
                         const IBString errorString) {
   std::cout << "err id: " << id << ", code" << errorCode
@@ -58,7 +71,7 @@ void IBKRHisData::error(const int id, const int errorCode,
 
 void IBKRHisData::connect() {
   client_ = std::unique_ptr<EClientL0>(EClientL0::New(this));
-  if (!client_->eConnect("", 7496, 101)) {
+  if (!client_->eConnect("", 7496, 104)) {
     throw std::runtime_error("Failed connect to TWS");
   }
 }
